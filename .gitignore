@@ -1,5 +1,0 @@
-# The scripts within the root using the _publish directory as target
-/_bin
-/_publish
-~$*.doc*
-~$*.xlsx*
