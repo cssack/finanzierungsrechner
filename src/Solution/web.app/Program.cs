@@ -3,8 +3,9 @@ global using web.app._abstractions;
 global using web.app.generators;
 using System.Globalization;
 
-Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("de-AT");
-Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("de-AT");
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("de-AT");
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("de-AT");
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
