@@ -10,6 +10,42 @@
 	<thead>
 		<tr>
 			<th class="text-end px-3">#</th>
+			<th class="text-end px-3">Jahr</th>
+			@foreach (var generator in  _input.Generators.OrderBy(x=>x.Name))
+			{
+				<th class="text-end px-3">@generator.Name</th>
+			}
+			<th class="text-end px-3">Summe</th>
+			<th style="width: 100%"></th>
+		</tr>
+
+	</thead>
+
+	<tbody>
+		@foreach (var (monatZahlungGroupedByYear, index) in  _zahlungenProMonat.GroupBy(x=>x.Monat.Year).OrderBy(x=>x.Key).Select((x,idx)=>(x, idx)))
+		{
+			<tr>
+				<td class="text-nowrap py-0 px-3">@(index+1)</td>
+				<td class="text-nowrap py-0 px-3">@monatZahlungGroupedByYear.Key</td>
+				@foreach (var zahlungenPerName in monatZahlungGroupedByYear.SelectMany(x=>x.Zahlungen).GroupBy(x=>x.Name).OrderBy(x=>x.Key))
+				{
+					<td class="text-nowrap py-0 px-3 text-end">
+						@zahlungenPerName.Sum(x=>x.Betrag).ToString("C")
+					</td>
+				}
+				<th class="text-nowrap py-0 px-3 text-end">
+					@monatZahlungGroupedByYear.SelectMany(x=>x.Zahlungen).Sum(x=>x?.Betrag ?? 0).ToString("C")
+				</th>
+				<td class="text-nowrap py-0 px-3"></td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<table class="table table-striped table-sm table-hover mt-5">
+	<thead>
+		<tr>
+			<th class="text-end px-3">#</th>
 			<th class="text-end px-3">Monat</th>
 			@foreach (var generator in  _input.Generators)
 			{
@@ -30,15 +66,15 @@
 				@foreach (var zahlung in monatZahlung.Zahlungen)
 				{
 					<td class="text-nowrap py-0 px-3 text-end">
-						@if (zahlung != null)
+						@if (zahlung.Betrag != 0)
 						{
 							@zahlung.Betrag.ToString("C")
 						}
 					</td>
 				}
-				<td class="text-nowrap py-0 px-3 text-end">
+				<th class="text-nowrap py-0 px-3 text-end">
 					@monatZahlung.Zahlungen.Sum(x=>x?.Betrag ?? 0).ToString("C")
-				</td>
+				</th>
 				<td class="text-nowrap py-0 px-3"></td>
 			</tr>
 		}

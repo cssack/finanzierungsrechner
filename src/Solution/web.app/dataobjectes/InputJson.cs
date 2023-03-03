@@ -9,25 +9,27 @@ public class InputJson
 	public IEnumerable<ZahlungenProMonat> ZahlungenProMonat()
 	{
 		var enumerators = Generators
-			.Select(x => x.Enumerate(ReferenceMonth).GetEnumerator())
+			.Select(x => (x, x.Enumerate(ReferenceMonth).GetEnumerator()))
 			.ToList();
 
+		var month = ReferenceMonth;
 		while (true)
 		{
 			var any = false;
-			var zahlungen = new List<IZahlung?>();
+			var zahlungen = new List<IZahlung>();
 
-			foreach (var enumerator in enumerators)
+			foreach (var (generator, enumerator) in enumerators)
 			{
 				if (!enumerator.MoveNext())
 				{
-					zahlungen.Add(null);
+					zahlungen.Add(new GeneratorZahlung(){Betrag = 0, Generator = generator, Monat = month});
 					continue;
 				}
 
 				any = true;
 				zahlungen.Add(enumerator.Current);
 			}
+			month = month.AddMonths(1);
 
 			if (!any)
 				yield break;
