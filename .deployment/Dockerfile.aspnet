@@ -1,0 +1,61 @@
+ARG DLL_FILENAME
+ARG PROJECT_FILE
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS prepare-restore-files
+ARG PROJECT_FILE
+WORKDIR /app
+ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN dotnet tool install --global --no-cache dotnet-subset --version 0.3.2
+COPY . .
+RUN dotnet subset restore "${PROJECT_FILE}" --root-directory /app --output /restore_subset/
+
+
+
+
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+ARG PROJECT_FILE
+WORKDIR /app
+
+# copy all the project files (input for the dotnet restore command)
+COPY --from=prepare-restore-files /restore_subset .
+
+# do the dotnet restore
+RUN dotnet restore "${PROJECT_FILE}"
+
+# Copy everything ele
+COPY . ./
+
+# Build and publish release version without restoring again
+RUN dotnet publish "${PROJECT_FILE}" -r linux-x64 -c Release -o /out
+
+
+
+
+
+
+
+
+# now build the runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+ARG DLL_FILENAME
+ENV DLL_FILENAME=$DLL_FILENAME
+
+# Install fonts for the excel export
+RUN apt-get update; apt-get install -y --no-install-recommends fonts-crosextra-carlito; apt-get clean
+
+# copy published app into the runtime image
+WORKDIR /app
+COPY --from=build-env /out .
+
+# setting default environment
+ENV ASPNETCORE_ENVIRONMENT=staging
+
+# setting port
+ENV ASPNETCORE_URLS=http://*:80
+EXPOSE 80/tcp
+
+LABEL org.opencontainers.image.vendor="Christian Sack"
+LABEL org.opencontainers.image.authors="christian@sack.at"
+
+ENTRYPOINT exec dotnet ${DLL_FILENAME}
