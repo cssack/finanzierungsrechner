@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-
+global using System.Collections;
+global using web.app._abstractions;
+global using web.app.generators;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
