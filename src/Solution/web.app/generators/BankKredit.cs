@@ -19,11 +19,20 @@ public class BankKredit : IGenerateZahlungen
 	
 	public IEnumerable<IGeneratorZahlung> Enumerate(DateTimeOffset referenceMonth)
 	{
-		var k = Math.Pow(1 + ZinsSatz, LaufzeitInMonaten / 12.0);
-		var anuitätenFaktor = k * ZinsSatz / (k - 1);
+		decimal monatlicheRate;
 
-		var jährlicheRate = KreditBetrag * (decimal)anuitätenFaktor;
-		var monatlicheRate = jährlicheRate / 12;
+		if (ZinsSatz == 0)
+		{
+			monatlicheRate = KreditBetrag / LaufzeitInMonaten;
+		}
+		else
+		{
+			var k = Math.Pow(1 + ZinsSatz, LaufzeitInMonaten / 12.0);
+			var anuitätenFaktor = k * ZinsSatz / (k - 1);
+
+			var jährlicheRate = KreditBetrag * (decimal)anuitätenFaktor;
+			monatlicheRate = jährlicheRate / 12;
+		}
 
 		for (var i = 0; i < Beginn; i++)
 			yield return new GeneratorZahlung { Generator = this, Monat = referenceMonth.AddMonths(i), Betrag = 0 };

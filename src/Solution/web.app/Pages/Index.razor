@@ -40,6 +40,13 @@
 			</tr>
 		}
 	</tbody>
+	
+	<tfoot>
+		<tr>
+			<td></td>
+			<td colspan="10000">Total: @_zahlungenProMonat.SelectMany(x=>x.Zahlungen).Sum(x=>x.Betrag).ToString("C")</td>
+		</tr>
+	</tfoot>
 </table>
 
 <table class="table table-striped table-sm table-hover mt-5">
@@ -91,10 +98,19 @@
 		{
 			new BankKredit()
 			{
+				Name = "Eigentümerkredit",
+				Beginn = 0,
+				AbbruchNach = 0,
+				KreditBetrag = 200_000,
+				LaufzeitInMonaten = 10 * 12,
+				ZinsSatz = 0.0,
+			},
+			new BankKredit()
+			{
 				Name = "Bankkredit",
 				Beginn = 0,
 				AbbruchNach = 0,
-				KreditBetrag = 730_000,
+				KreditBetrag = 530_000,
 				LaufzeitInMonaten = 20 * 12,
 				ZinsSatz = 0.055,
 			},
