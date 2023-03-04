@@ -5,12 +5,12 @@ namespace web.app._abstractions;
 
 public interface IHaveKreditBetrag
 {
-	public decimal KreditBetrag { get; }
+	public decimal KreditBetrag { get; set; }
 }
 
 [JsonDerivedType(typeof(BankKredit), typeDiscriminator: nameof(BankKredit))]
 [JsonDerivedType(typeof(SfgKredit), typeDiscriminator: nameof(SfgKredit))]
-public interface IGenerateZahlungen 
+public interface IGenerateZahlungen : IHaveKreditBetrag
 {
 	public string Name { get; }
 	

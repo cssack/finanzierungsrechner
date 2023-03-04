@@ -1,4 +1,12 @@
-﻿<div class="position-relative">
+﻿@inject IJSRuntime JsRuntime
+
+xdown: @_clientXDown px<br/>
+xmove: @_clientXMove px<br/>
+pageX: @pageX px<br/>
+isclicked: @_isClicked<br/>
+
+
+<div class="position-relative" @onmousemove="@MouseMove">
 	<div style="height: 30px" class="d-flex">
 		@foreach (var val in Values)
 		{
@@ -10,19 +18,28 @@
 	@{
 		decimal cumPercentage = 0;
 	}
-	@foreach (var val in Values.Take(Values.Count-1))
+	@foreach (var val in Values.Take(Values.Count - 1))
 	{
 		cumPercentage += ((val.Euros / Sum) * 100);
-		<div 
-			class="position-absolute start-0 top-0" 
-			 style="height: 30px; margin-left: calc(@cumPercentage.ToString("N0")% - 15px); width: 20px; background-color: black; border: 1px solid black">
-
+		
+		<div
+			@onpointerdown="@MouseDown"
+			@onmouseup="@MouseUp"
+			
+			class="position-absolute start-0 top-0"
+			style="height: 30px; margin-left: calc(@cumPercentage.ToString("N0")% - 15px); width: 20px; background-color: black; border: 1px solid black">
+			
 		</div>
 	}
 </div>
 
 @code {
 
+	private bool _isClicked;
+	private double pageX;
+	private double _clientXDown = 0;
+	private double _clientXMove = 0;
+	
 	private decimal Sum { get; set; }
 
 	[Parameter]
@@ -40,8 +57,22 @@
 		public decimal Euros { get; set; }
 	}
 
-	private void Callback()
+	private void MouseDown(MouseEventArgs obj)
 	{
+		_isClicked = true;
+		_clientXDown = obj.ClientX;
+		JsRuntime.InvokeAsync<string?>("Element.setPointerCapture", Array.Empty<object>());
+	}
+
+	private void MouseUp(MouseEventArgs obj)
+	{
+		_isClicked = false;
+	}
+
+	private void MouseMove(MouseEventArgs obj)
+	{
+		_clientXMove = obj.ClientX;
+		double objPageX = obj.ScreenX;
 	}
 
 }
