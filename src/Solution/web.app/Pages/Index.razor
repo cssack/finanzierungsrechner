@@ -11,7 +11,7 @@
 		@foreach (var i in _input.Generators)
 		{
 			<div class="d-flex flex-row gap-2">
-				<div style="width: 70px" @onclick="@(() => { if (!_lockedGeneratoren.Remove(i)) _lockedGeneratoren.Add(i);})">@(_lockedGeneratoren.Contains(i)?"Locked":"Unlocked")</div>
+				<button class="btn btn-outline-secondary btn-sm py-0" style="width: 70px" @onclick="@(() => { if (!_lockedGeneratoren.Remove(i)) _lockedGeneratoren.Add(i);})">@(_lockedGeneratoren.Contains(i)?"Locked":"Unlocked")</button>
 				<div style="width: 130px">@i.Name: </div>
 				<input step="1000" class="flex-grow-1" type="range" min="0" max="930000" value="@i.KreditBetrag" @oninput="@(val => CoerceInput(i, decimal.Parse(val.Value.ToString())))"/>
 				@i.KreditBetrag
