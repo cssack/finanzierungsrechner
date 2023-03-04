@@ -1,0 +1,47 @@
+﻿<div class="position-relative">
+	<div style="height: 30px" class="d-flex">
+		@foreach (var val in Values)
+		{
+			<div style="height: 30px; width: @(((val.Euros / Sum) * 100).ToString("N0"))%; border: 1px solid black; text-align: center">
+				@val.Euros.ToString("C")
+			</div>
+		}
+	</div>
+	@{
+		decimal cumPercentage = 0;
+	}
+	@foreach (var val in Values.Take(Values.Count-1))
+	{
+		cumPercentage += ((val.Euros / Sum) * 100);
+		<div 
+			class="position-absolute start-0 top-0" 
+			 style="height: 30px; margin-left: calc(@cumPercentage.ToString("N0")% - 15px); width: 20px; background-color: black; border: 1px solid black">
+
+		</div>
+	}
+</div>
+
+@code {
+
+	private decimal Sum { get; set; }
+
+	[Parameter]
+	public List<Value> Values { get; set; }
+
+
+	protected override void OnParametersSet()
+	{
+		Sum = Values.Sum(x => x.Euros);
+	}
+
+
+	public class Value
+	{
+		public decimal Euros { get; set; }
+	}
+
+	private void Callback()
+	{
+	}
+
+}

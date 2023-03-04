@@ -2,7 +2,7 @@
 
 namespace web.app.generators;
 
-public class BankKredit : IGenerateZahlungen
+public class BankKredit : IGenerateZahlungen, IHaveKreditBetrag
 {
 	public required string Name { get; set; }
 

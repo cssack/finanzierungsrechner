@@ -2,7 +2,7 @@ using web.app.dataobjectes;
 
 namespace web.app.generators;
 
-public class SfgKredit : IGenerateZahlungen
+public class SfgKredit : IGenerateZahlungen, IHaveKreditBetrag
 {
 	public required string Name { get; set; }
 	public required int Beginn { get; set; }

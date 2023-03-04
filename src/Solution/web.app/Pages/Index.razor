@@ -1,5 +1,8 @@
 ﻿@page "/"
 @using web.app.dataobjectes
+@using web.app.Pages.shared
+
+<MultiThumbRange Values="@(_input.Generators.Select(x=>new MultiThumbRange.Value(){Euros = ((x as IHaveKreditBetrag)?.KreditBetrag).Value}).ToList())"></MultiThumbRange>
 
 <div class="d-flex flex-row">
 	<div class="">
