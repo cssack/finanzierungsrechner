@@ -24,5 +24,5 @@ jobs:
       shell: bash
       
     - name: Run deployment script
-      run: ./.deployment/deploy.aspnet.sh "finanzierung.christian.sack.at" "finanzierungsrechner:latest" "finanzierungsrechner" "auth" "" ""
+      run: ./.deployment/deploy.aspnet.sh "finanzierung.christian.sack.at" "finanzierungsrechner:latest" "finanzierungsrechner" "auth-christian-sack-at" "" ""
       shell: bash
