@@ -26,7 +26,9 @@ DOCKER_RUN_ARGS=$6
 CONTAINER_NAME=$(echo "$CONTAINER_NAME" | awk '{print tolower($0)}')
 
 TRAEFIK_ROUTER_NAME="${CONTAINER_NAME//./"-"}-router"
-DOCKER_NETWORK=traefik
+
+
+DOCKER_NETWORK=bridge_l1dmz
 
 
 
