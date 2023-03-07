@@ -6,6 +6,7 @@ public class SfgKredit : IGenerateZahlungen, IHaveKreditBetrag
 {
 	public required string Name { get; set; }
 	public required int Beginn { get; set; }
+	public required int VorlaufDauer { get; set; }
 	public int AbbruchNach { get; set; }
 
 	public required decimal KreditBetrag { get; set; }
@@ -21,7 +22,7 @@ public class SfgKredit : IGenerateZahlungen, IHaveKreditBetrag
 			yield return new GeneratorZahlung { Generator = this, Monat = referenceMonth.AddMonths(i), Betrag = 0 };
 		
 		
-		var vorlaufMonate = 24;
+		var vorlaufMonate = VorlaufDauer;
 		var vorlaufZahlung = (KreditBetrag * (decimal)ZinsSatz) / 12;
 
 		for (int i = 0; i < vorlaufMonate; i++)
